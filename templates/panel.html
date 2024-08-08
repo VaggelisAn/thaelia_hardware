@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            background-color: #333;
+            font-size: 16px;
+            display: inline-block;
+        }
+        .button_off {
+            color: red;
+            font-weight: bold;
+        }
+        .button_on {
+            color: green;
+            font-weight: bold;
+        }
+        .input-container {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .input-container input[type="number"] {
+            padding: 10px;
+            margin-right: 10px;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        .box-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+        .box {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            color: white;
+            background-color: #555;
+            font-size: 16px;
+        }
+        .box.on {
+            background-color: lightgray;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleFan" class="button" value="off" onclick="toggleFan(this)">Fan System is <span class="button_off">OFF</span></button>
+    <div class="input-container">
+        <input type="number" id="samplingPeriod" name="samplingPeriod" min="1" value="10" step="1">
+        <button class="button" onclick="updatePeriod()">Set Sampling Period</button>
+    </div>
+
+    <script>
+        function toggleFan(button) {
+            let state = button.innerHTML.includes('OFF') ? 'ON' : 'OFF';
+            button.value = state
+
+            let state_style = ["button_", state].join('');
+            button.innerHTML = `Fan System is <span class="${state_style.toLowerCase()}">${state.toUpperCase()}</span>`;
+
+            const samplingPeriod = document.getElementById('samplingPeriod').value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/toggle_fan', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ samplingPeriod: samplingPeriod, state: state }));
+        }
+
+        function updatePeriod() {
+            const samplingPeriod = document.getElementById('samplingPeriod').value;
+            alert(`Sampling Period updated to: ${samplingPeriod}`);
+        }
+    </script>
+</body>
+</html>

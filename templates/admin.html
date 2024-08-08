@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Status Toggle</title>
+    <style>
+        .low {
+            color: red;
+            font-weight: bold;
+        }
+        .high {
+            color: green;
+            font-weight: bold;
+        }
+        .pinButton {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .btn_container {
+            width: 500px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <script>
+        function togglePinStatus(button) {
+            let pin = button.dataset.pin;
+            let state = button.innerHTML.includes('LOW') ? 'HIGH' : 'LOW';
+            button.innerHTML = `Pin ${pin} is <span class="${state.toLowerCase()}">${state}</span>`;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/toggle_admin', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ pin: pin, state: state }));
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <!-- Generating 13 buttons -->
+        <script>
+            for (let i = 2; i <= 13; i++) {
+              if (i==2)
+                document.write(`<div class="btn_container"><button class="pinButton" data-pin="${i}" onclick="togglePinStatus(this)">Pin ${i} is <span class="low">LOW</span></button>`);
+              else if (i%3 == 2 && i>1)
+                document.write(`</div><div class="btn_container"><button class="pinButton" data-pin="${i}" onclick="togglePinStatus(this)">Pin ${i} is <span class="low">LOW</span></button>`);
+              else
+                document.write(`<button class="pinButton" data-pin="${i}" onclick="togglePinStatus(this)">Pin ${i} is <span class="low">LOW</span></button>`);
+            }
+        </script>
+    </div>
+</body>
+</html>
