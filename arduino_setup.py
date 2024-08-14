@@ -1,5 +1,6 @@
 # SETUP ARDUINO SERIAL COMMUNICATION
 # arduino_setup.py
+# Evangelos Ananiadis - vaggelis.a.g.m@gmail.com / eananiadis.igemthessaly@gmail.com
 
 # ---------------------
 # - - - Local Files - -
@@ -8,9 +9,10 @@ import config
 # - - - Libraries - - -
 import pyfirmata2
 # ---------------------
+PORT = pyfirmata2.Arduino.AUTODETECT
 
 def init_arduino():
-    config.board = pyfirmata2.Arduino(config.ARDUINO_PORT)
+    config.board = pyfirmata2.Arduino(PORT)
     # default sampling interval of 19ms
     config.board.samplingOn()
 

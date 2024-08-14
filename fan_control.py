@@ -1,5 +1,8 @@
 # FAN CONTROLLER
 # fan_control.py
+# Evangelos Ananiadis - vaggelis.a.g.m@gmail.com / eananiadis.igemthessaly@gmail.com
+
+
 # ---------------------
 # - - - Local Files - -
 import config
@@ -14,13 +17,17 @@ global active_fan, state, period
 def fan_control():
     global active_fan
     active_fan = 0
+    activation_msg = 1
 
     while (True):
         if (state == 0):
+            if (activation_msg == 1):
                 print("Fan System is OFF\nAll pins set to LOW", flush=True)
-                active_fan = 0
-                for i in range(8):
-                    write_pin(i+2, 0)
+                activation_msg = 0
+
+            active_fan = 0
+            for i in range(8):
+                write_pin(i+2, 0)
             
         elif (state == 1):
             print(f"Fan System is ON | Fan Period={period}", flush=True)
@@ -33,6 +40,8 @@ def fan_control():
             active_fan = active_fan + 1
             if (active_fan == 8):
                 active_fan = 0
+            activation_msg = 1
+
         else:
             print("Something Went Wrong", flush=True)
         

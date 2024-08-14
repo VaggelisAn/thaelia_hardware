@@ -1,9 +1,13 @@
 # LOCAL SERVER 
 # local_server.py
+# Evangelos Ananiadis - vaggelis.a.g.m@gmail.com / eananiadis.igemthessaly@gmail.com
+
 # ---------------------
 # - - - Local Files - -
+
 import config
 from fan_control import update_fan_state
+from temp_control import update_temp_state
 
 # - - - Libraries - - -
 from bottle import Bottle, static_file, request
@@ -11,7 +15,7 @@ from bottle import Bottle, static_file, request
 # ---------------------
 
 # - - - Directories & Routings - - -
-ROOT_TEMPLATES = "GUI/templates"
+ROOT_TEMPLATES = "/home/vagos/Desktop/thaelia_hardware-main/templates"
 
 panel_filename = "panel.html"
 panel_route = "/panel"
@@ -20,6 +24,7 @@ admin_filename = "admin.html"
 admin_route = "/admin"
 
 toggle_fan_route = "/toggle_fan"
+toggle_temp_route = "/toggle_temperature_control"
 toggle_admin_route = '/toggle_admin'
 #------------------------------------
 
@@ -55,6 +60,20 @@ def toggle_admin():
         print("ERROR IN BOARD STATE CHANGE")
 
     return "OK"
+    
+# Route to handle the Client Panel AJAX request
+@app.post(toggle_temp_route)
+def toggle_temperature(): 
+
+    data = request.json
+    temp_state = data['state']
+
+    print("update temperature controller state")
+    update_temp_state(temp_state)
+
+    return "OK"
+
+
 
 # Route to handle the Client Panel AJAX request
 @app.post(toggle_fan_route)
