@@ -25,7 +25,8 @@ admin_route = "/admin"
 
 toggle_fan_route = "/toggle_fan"
 toggle_temp_route = "/toggle_temperature_control"
-toggle_admin_route = '/toggle_admin'
+toggle_admin_route = "/toggle_admin"
+close_sys_route = "/close_sys"
 #------------------------------------
 
 
@@ -67,9 +68,10 @@ def toggle_temperature():
 
     data = request.json
     temp_state = data['state']
+    temp_goal = data['goalTemp']
 
     print("update temperature controller state")
-    update_temp_state(temp_state)
+    update_temp_state(temp_state, temp_goal)
 
     return "OK"
 
@@ -86,4 +88,12 @@ def toggle_fan():
     print("update fan state")
     update_fan_state(fan_state, fan_period)
 
+    return "OK"
+
+@app.post(close_sys_route)
+def close_sys():
+    
+    print("Closing...")
+    
+        
     return "OK"

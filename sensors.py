@@ -14,7 +14,6 @@ def read_shtc3():
         with config.sensor_lock:
             config.air_temp = temperature
             config.air_humidity = humidity
-            print(f"t = {config.air_temp}")
         
         #print("Temperature: %0.1f C" % temperature)
         #print("Humidity: %0.1f %%" % humidity)

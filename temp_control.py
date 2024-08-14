@@ -21,26 +21,29 @@ def temp_control():
 	
 	while (True):
 		with config.sensor_lock:
-			if (state == 1 and (config.air_temp < config.GOAL_TEMP - config.TEMP_THRESH)):
-				if (activation_msg == 1):
-					print("Activating heating.")
-					activation_msg = 0
-				config.board.digital[config.TEMP_CONTROL_PIN].write(1)
-			elif (state == 1 and (config.air_temp > config.GOAL_TEMP + config.TEMP_THRESH)):
+			if (state == 1 and (config.air_temp > (goal + config.TEMP_THRESH))):
 				if (activation_msg == 1):
 					print("Activating cooling.")
 					activation_msg = 0
 				config.board.digital[config.TEMP_CONTROL_PIN].write(1)
-			else:
+			elif (state == 1 and (config.air_temp < (goal - config.TEMP_THRESH))):
+				if (activation_msg == 1):
+					print("Activating heating.")
+					activation_msg = 0
+				config.board.digital[config.TEMP_CONTROL_PIN].write(1)
+			elif (state == 1):
 				if (activation_msg == 0):
 					print("Goal Temperature is reached, deactivating cooling.")
 					activation_msg = 1
-
+				config.board.digital[config.TEMP_CONTROL_PIN].write(0)
+			elif (state == 0):
 				config.board.digital[config.TEMP_CONTROL_PIN].write(0)
 			time.sleep(config.SAMPLE_TEMP_DELAY)
    
-def update_temp_state(temp_state):
-	global state
+def update_temp_state(temp_state, temp_goal):
+	global state, goal
+	
+	goal = int(temp_goal)
 	state = 0 if temp_state == 'OFF' else 1
 	if (state == 1):
 		print("Temperature Controller is ON", flush=True)

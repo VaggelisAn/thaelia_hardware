@@ -18,7 +18,7 @@ def init():
     # Temperature Controller:
     global TEMP_CONTROL_PIN, GOAL_TEMP, TEMP_THRESH, SAMPLE_TEMP_DELAY
     TEMP_CONTROL_PIN = 10
-    GOAL_TEMP = 30
+    GOAL_TEMP = 40
     TEMP_THRESH = 2
     SAMPLE_TEMP_DELAY = 1
     
