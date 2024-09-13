@@ -4,13 +4,14 @@
 
 # ---------------------
 # - - - Local Files - -
-
 import config
 from fan_control import update_fan_state
 from temp_control import update_temp_state
+from irrigation_control import update_irr_state
 
 # - - - Libraries - - -
 from bottle import Bottle, static_file, request
+from os import _exit
 
 # ---------------------
 
@@ -26,11 +27,11 @@ admin_route = "/admin"
 toggle_fan_route = "/toggle_fan"
 toggle_temp_route = "/toggle_temperature_control"
 toggle_admin_route = "/toggle_admin"
+toggle_irrigation_route = "/toggle_irrigation"
 close_sys_route = "/close_sys"
 #------------------------------------
 
-
-# - - - Routes - - -
+# Local Webserver App:
 app = Bottle()
 
 # - - Client Panel - -
@@ -90,10 +91,21 @@ def toggle_fan():
 
     return "OK"
 
+@app.post(toggle_irrigation_route)
+def toggle_irrigation():
+    data = request.json
+    irr_state = data['state']
+    
+    print("update irrigation state")
+    update_irr_state(irr_state)
+
+    return "OK"
+    
+# Route to handle the Client Panel AJAX request
 @app.post(close_sys_route)
 def close_sys():
     
     print("Closing...")
-    
+    _exit(0)
         
     return "OK"

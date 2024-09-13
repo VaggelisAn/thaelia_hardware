@@ -12,14 +12,14 @@ import time
 import threading
 # ---------------------
 
-#def check_temp_range():
-	#global state
-   
+# enables arduino pins responsible for controlling temp
 def temp_control():
 	global state
+	# activation_msg is used for printing msgs only once
 	activation_msg = 1
 	
 	while (True):
+		# sensor_lock syncs temp control thread + temp sensor thread
 		with config.sensor_lock:
 			if (state == 1 and (config.air_temp > (goal + config.TEMP_THRESH))):
 				if (activation_msg == 1):
@@ -39,7 +39,8 @@ def temp_control():
 			elif (state == 0):
 				config.board.digital[config.TEMP_CONTROL_PIN].write(0)
 			time.sleep(config.SAMPLE_TEMP_DELAY)
-   
+
+# check whether temperature control was enabled through the local server 
 def update_temp_state(temp_state, temp_goal):
 	global state, goal
 	
@@ -52,6 +53,7 @@ def update_temp_state(temp_state, temp_goal):
 		
 	return
 
+# initiate temp controlling thread
 def init_temp_system():
 	global state
 	state = 0

@@ -72,17 +72,31 @@
         <input type="number" id="samplingPeriod" name="samplingPeriod" min="1" value="10" step="1">
         <button class="button" onclick="updatePeriod()">Set Sampling Period</button>
     </div>
-    <button id="toggleTemp" class="button" value="off" onclick="toggleTemp(this)">Temperature Control Unit is <span class="button_off">OFF</span></button>    
+    <button id="toggleTemp" class="button" value="off" onclick="toggleTemp(this)">Temperature Control is <span class="button_off">OFF</span></button>    
     <div class="input-container">
         <input type="number" id="goalTemp" name="goalTemp" min="15" max="35" value="25" step="1">
         <button class="button" onclick="updateGoalTemp()">Set Temperature Goal</button>
     </div>
+    <button id="toggleIrrigation" class="button" value="off" onclick="toggleIrrigation(this)">Automatic Irrigation & Humidity Control is <span class="button_off">OFF</span></button>    
     <button id="exitButton" class="button" value="off" onclick="exitButton(this)">Close Monitoring System</span></button>    
     <script>
         function exitButton(button) {  
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/close_sys', true);
             xhr.send();
+        }
+        
+        function toggleIrrigation(button) {
+            let state = button.innerHTML.includes('OFF') ? 'ON' : 'OFF';
+            button.value = state
+
+            let state_style = ["button_", state].join('');
+            button.innerHTML = `Automatic Irrigation & Humidity Control is <span class="${state_style.toLowerCase()}">${state.toUpperCase()}</span>`;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/toggle_irrigation', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ state: state }));
         }
         
         function toggleFan(button) {
@@ -110,7 +124,7 @@
             button.value = state
 
             let state_style = ["button_", state].join('');
-            button.innerHTML = `Temperature Control Unit is <span class="${state_style.toLowerCase()}">${state.toUpperCase()}</span>`;
+            button.innerHTML = `Temperature Control is <span class="${state_style.toLowerCase()}">${state.toUpperCase()}</span>`;
 
             const goalTemp = document.getElementById('goalTemp').value;
 

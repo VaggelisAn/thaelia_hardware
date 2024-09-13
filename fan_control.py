@@ -14,6 +14,7 @@ import threading
 # ---------------------
 global active_fan, state, period
 
+# enables arduino pins responsible for controlling the sampling fans
 def fan_control():
     global active_fan
     active_fan = 0
@@ -27,15 +28,15 @@ def fan_control():
 
             active_fan = 0
             for i in range(8):
-                write_pin(i+2, 0)
+                write_pin(i+config.FAN_PIN_OFFSET, 0)
             
         elif (state == 1):
             print(f"Fan System is ON | Fan Period={period}", flush=True)
 
-            print(f"Pin {active_fan+2} set to HIGH", flush=True)
+            print(f"Pin {active_fan+config.FAN_PIN_OFFSET} set to HIGH", flush=True)
             for i in range(8):
-                write_pin(i+2, 0)
-            write_pin(active_fan+2, 1)
+                write_pin(i+config.FAN_PIN_OFFSET, 0)
+            write_pin(active_fan+config.FAN_PIN_OFFSET, 1)
 
             active_fan = active_fan + 1
             if (active_fan == 8):
@@ -47,12 +48,13 @@ def fan_control():
         
         time.sleep(period)
     
-
+# check whether temperature control was enabled through the local server 
 def update_fan_state(fan_state, fan_period):
     global state, period
     state = 0 if fan_state == 'OFF' else 1
     period = int(fan_period)
 
+# initiate fan controlling thread
 def init_fan_system():
     global active_fan, state, period
     active_fan = 0
