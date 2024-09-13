@@ -6,4 +6,4 @@ This collaborative effort addresses a fundamental question in biosafety: "How sa
 For more information visit our wiki: https://2024.igem.wiki/thessaly/
 To see more projects from the iGEM Thessaly team, visit: https://igem-thessaly.uth.gr/
 
-The code is also hosted on the wiki
+The code is also hosted on our team's GitLab: 
